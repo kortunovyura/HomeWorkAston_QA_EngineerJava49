@@ -1,6 +1,8 @@
+import java.util.Arrays;
+
 public class Main {
     public static void main(String[] args) {
-        stringInteger();
+        array();
     }
 
     public static void printThreeWords() {
@@ -97,5 +99,29 @@ public class Main {
         for (int i = 1; i <= b; i++) {
             System.out.println(a);
         }
+    }
+
+    public static void bissextile(String[] args) {
+        bissextile();
+    }
+
+    public static void bissextile() {
+        Short a = 2026;
+        if ((a % 400 == 0) || ((a % 4 == 0) && (a % 100 != 0))) {
+            System.out.print("true");
+        } else
+            System.out.print("false");
+    }
+
+    public static void array(String[] args) {
+        array();
+    }
+
+    public static void array() {
+        byte[] b = {1, 1, 0, 0, 1, 0, 1, 1, 0, 0};
+        for (byte i = 0; i < b.length; i++) {
+            b[i] ^= 1;
+        }
+        System.out.print(Arrays.toString(b));
     }
 }
