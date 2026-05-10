@@ -2,7 +2,7 @@ import java.util.Arrays;
 
 public class Main {
     public static void main(String[] args) {
-        array();
+        lenValue();
     }
 
     public static void printThreeWords() {
@@ -20,10 +20,6 @@ public class Main {
         }
     }
 
-    public static void printColor(String[] args) {
-        printColor();
-    }
-
     public static void printColor() {
         int value = 101;
         if (value <= 0) {
@@ -33,10 +29,6 @@ public class Main {
         } else {
             System.out.print("Зеленый");
         }
-    }
-
-    public static void compareNumbers(String[] args) {
-        compareNumbers();
     }
 
     public static void compareNumbers() {
@@ -49,10 +41,6 @@ public class Main {
         }
     }
 
-    public static void twoNumbers(String[] args) {
-        twoNumbers();
-    }
-
     public static void twoNumbers() {
         byte a = 5;
         byte b = 5;
@@ -61,10 +49,6 @@ public class Main {
         } else {
             System.out.print("false");
         }
-    }
-
-    public static void fullInteger(String[] args) {
-        fullInteger();
     }
 
     public static void fullInteger() {
@@ -76,10 +60,6 @@ public class Main {
         }
     }
 
-    public static void mainFull(String[] args) {
-        mainFull();
-    }
-
     public static void mainFull() {
         byte a = -5;
         if (a < 0) {
@@ -87,10 +67,6 @@ public class Main {
         } else {
             System.out.print("false");
         }
-    }
-
-    public static void stringInteger(String[] args) {
-        stringInteger();
     }
 
     public static void stringInteger() {
@@ -101,10 +77,6 @@ public class Main {
         }
     }
 
-    public static void bissextile(String[] args) {
-        bissextile();
-    }
-
     public static void bissextile() {
         Short a = 2026;
         if ((a % 400 == 0) || ((a % 4 == 0) && (a % 100 != 0))) {
@@ -113,15 +85,51 @@ public class Main {
             System.out.print("false");
     }
 
-    public static void array(String[] args) {
-        array();
-    }
-
     public static void array() {
         byte[] b = {1, 1, 0, 0, 1, 0, 1, 1, 0, 0};
         for (byte i = 0; i < b.length; i++) {
             b[i] ^= 1;
         }
         System.out.print(Arrays.toString(b));
+    }
+
+    public static void array100() {
+        byte[] b = new byte[100];
+        for (byte i = 0; i < b.length; i++) {
+            b[i] = (byte) (i + 1);
+        }
+        System.out.print(Arrays.toString(b));
+    }
+
+    public static void array12() {
+        byte[] b = {1, 5, 3, 2, 11, 4, 5, 2, 4, 8, 9, 1};
+        for (byte i = 0; i < b.length; i++) {
+            if (b[i] < 6) {
+                b[i] *= 2;
+            }
+        }
+        System.out.print(Arrays.toString(b));
+    }
+
+    public static void squareArray() {
+        byte b = 3;
+        byte[][] a = new byte[b][b];
+        for (byte i = 0; i < b; i++) {
+            a[i][i] = 1;
+        }
+        for (byte i = 0; i < b; i++) {
+            for (byte j = 0; j < b; j++) {
+                System.out.print(a[i][j]);
+            }
+            System.out.println();
+        }
+    }
+
+    public static void lenValue() {
+        int len = 5;
+        int initialValue = 8888;
+        int[] c = new int[len];
+        Arrays.fill(c, initialValue);
+        System.out.print(Arrays.toString(c));
     }
 }
