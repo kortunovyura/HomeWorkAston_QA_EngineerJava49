@@ -1,6 +1,6 @@
 public class Main {
     public static void main(String[] args) {
-        checkSumSign();
+        stringInteger();
     }
 
     public static void printThreeWords() {
@@ -18,4 +18,84 @@ public class Main {
         }
     }
 
+    public static void printColor(String[] args) {
+        printColor();
+    }
+
+    public static void printColor() {
+        int value = 101;
+        if (value <= 0) {
+            System.out.print("Красный");
+        } else if (value > 0 && value <= 100) {
+            System.out.print("Желтый");
+        } else {
+            System.out.print("Зеленый");
+        }
+    }
+
+    public static void compareNumbers(String[] args) {
+        compareNumbers();
+    }
+
+    public static void compareNumbers() {
+        int a = 5;
+        int b = 0;
+        if (a >= b) {
+            System.out.print("a >= b");
+        } else {
+            System.out.print("a < b");
+        }
+    }
+
+    public static void twoNumbers(String[] args) {
+        twoNumbers();
+    }
+
+    public static void twoNumbers() {
+        byte a = 5;
+        byte b = 5;
+        if (10 <= a + b & a + b <= 20) {
+            System.out.print("true");
+        } else {
+            System.out.print("false");
+        }
+    }
+
+    public static void fullInteger(String[] args) {
+        fullInteger();
+    }
+
+    public static void fullInteger() {
+        byte a = 5;
+        if (a < 0) {
+            System.out.print("Число отрицательное");
+        } else {
+            System.out.print("Число положительное");
+        }
+    }
+
+    public static void mainFull(String[] args) {
+        mainFull();
+    }
+
+    public static void mainFull() {
+        byte a = -5;
+        if (a < 0) {
+            System.out.print("true");
+        } else {
+            System.out.print("false");
+        }
+    }
+
+    public static void stringInteger(String[] args) {
+        stringInteger();
+    }
+
+    public static void stringInteger() {
+        String a = "c5wtwct45wt";
+        byte b = 5;
+        for (int i = 1; i <= b; i++) {
+            System.out.println(a);
+        }
+    }
 }
