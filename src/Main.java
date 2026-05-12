@@ -2,7 +2,8 @@ import java.util.Arrays;
 
 public class Main {
     public static void main(String[] args) {
-        lenValue();
+        boolean result = mainFull(5);
+        System.out.println(result);
     }
 
     public static void printThreeWords() {
@@ -57,13 +58,8 @@ public class Main {
         }
     }
 
-    public static void mainFull() {
-        byte a = -5;
-        if (a < 0) {
-            System.out.print("true");
-        } else {
-            System.out.print("false");
-        }
+    public static boolean mainFull(int number) {
+        return number < 0;
     }
 
     public static void stringInteger() {
