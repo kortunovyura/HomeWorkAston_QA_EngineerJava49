@@ -41,14 +41,11 @@ public class Main {
         }
     }
 
-    public static void twoNumbers() {
+    public boolean twoNumbers() {
         byte a = 5;
         byte b = 5;
-        if (10 <= a + b & a + b <= 20) {
-            System.out.print("true");
-        } else {
-            System.out.print("false");
-        }
+        byte sum = (byte) (a + b);
+        return sum >= 10 && sum <= 20;
     }
 
     public static void fullInteger() {
