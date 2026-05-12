@@ -1,9 +1,7 @@
 import java.util.Arrays;
 
 public class Main {
-    public static void main(String[] args) {
-        stringInteger("c5wtwct45wt", 5);
-    }
+
 
     public static void printThreeWords() {
         System.out.print("Orange \nBanana \nApple");
@@ -67,15 +65,14 @@ public class Main {
         }
     }
 
-    public static void bissextile() {
-        Short a = 2026;
-        if ((a % 400 == 0) || ((a % 4 == 0) && (a % 100 != 0))) {
-            System.out.print("true");
-        } else
-            System.out.print("false");
+    public static boolean bissextile(int a) {
+        return (a % 400 == 0) || ((a % 4 == 0) && (a % 100 != 0));
     }
+    public static void main(String[] args) {
+        int year= 2028;
+        System.out.println(year + " -> " + bissextile(year)); }
 
-    public static void array() {
+            public static void array() {
         byte[] b = {1, 1, 0, 0, 1, 0, 1, 1, 0, 0};
         for (byte i = 0; i < b.length; i++) {
             b[i] ^= 1;
