@@ -2,8 +2,7 @@ import java.util.Arrays;
 
 public class Main {
     public static void main(String[] args) {
-        boolean result = mainFull(5);
-        System.out.println(result);
+        stringInteger("c5wtwct45wt", 5);
     }
 
     public static void printThreeWords() {
@@ -62,10 +61,8 @@ public class Main {
         return number < 0;
     }
 
-    public static void stringInteger() {
-        String a = "c5wtwct45wt";
-        byte b = 5;
-        for (int i = 1; i <= b; i++) {
+    public static void stringInteger(String a, int b) {
+        for (int i = 0; i < b; i++) {
             System.out.println(a);
         }
     }
