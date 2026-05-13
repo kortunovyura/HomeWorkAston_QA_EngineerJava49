@@ -1,6 +1,11 @@
+package java.lesson2;
+
 import java.util.Arrays;
 
 public class Main {
+    public static void main (String[] args) {
+        twoNumbers();
+    }
 
 
     public static void printThreeWords() {
@@ -39,6 +44,9 @@ public class Main {
         }
     }
 
+
+    boolean result = twoNumbers();
+        System.out.println(result);
     public boolean twoNumbers() {
         byte a = 5;
         byte b = 5;
