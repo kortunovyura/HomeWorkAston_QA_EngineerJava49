@@ -1,9 +1,10 @@
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class Park {
-    String parkName;
-    List<Attraction> attractions;
+    public String parkName;
+    public List<Attraction> attractions;
 
     public Park(String parkName) {
         this.parkName = parkName;
@@ -35,7 +36,7 @@ public class Park {
 
     public void printAttractions() {
         for (Attraction attr : attractions) {
-            attr.displayInfo();
+            attr.displayInfo(this.parkName);
         }
     }
 
