@@ -20,9 +20,4 @@ public class Product {
     public String toString() {
         return name + date + "(" + manufacturer + ")" + country + " - " + price + " руб.   Наличие:" + (available ? " На складе" : " Под заказ");
     }
-
-    @Override
-    public String toString() {
-        return name + date + "(" + manufacturer + ")" + country + " - " + price + " руб. Наличие:" + (available ? " На складе" : " Под заказ");
-    }
 }
