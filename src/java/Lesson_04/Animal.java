@@ -1,10 +1,10 @@
 
 
 public class Animal {
-    String name;
-    int runLimit;
-    int swimLimit;
-    static int animalCount = 0;
+    public String name;
+    public int runLimit;
+    public int swimLimit;
+    public static int animalCount = 0;
 
     public Animal(String name, int runLimit, int swimLimit) {
         this.name = name;

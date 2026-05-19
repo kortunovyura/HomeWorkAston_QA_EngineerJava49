@@ -10,9 +10,14 @@ public class Cat extends Animal {
         catCount++;
     }
 
-    public void eat(Plate plate) {
+    public void eat(Plate plate, int amount) {
+        if (amount <= 0) {
+            System.out.println("Количество еды должно быть больше нуля.");
+            return;
+        }
+
         if (!satiety) {
-            if (plate.decreaseFood(10)) {
+            if (plate.decreaseFood(amount)) {
                 satiety = true;
                 System.out.println(name + " поел и теперь сыт.");
             } else {
