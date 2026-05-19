@@ -1,14 +1,10 @@
-class Rectangle  implements Shape {
+class Rectangle implements Shape {
     private double width;
     private double height;
-    private String fillColor;
-    private String borderColor;
 
-    public Rectangle(double width, double height, String fillColor, String borderColor) {
+    public Rectangle(double width, double height) {
         this.width = width;
         this.height = height;
-        this.fillColor = fillColor;
-        this.borderColor = borderColor;
     }
 
     @Override
@@ -22,7 +18,8 @@ class Rectangle  implements Shape {
     }
 
     @Override
-    public String getFillColor() { return fillColor; }
+    public String getFillColor() { return null; }
+
     @Override
-    public String getBorderColor() { return borderColor; }
+    public String getBorderColor() { return null; }
 }

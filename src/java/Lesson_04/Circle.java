@@ -1,12 +1,8 @@
 class Circle implements Shape {
     private double radius;
-    private String fillColor;
-    private String borderColor;
 
-    public Circle(double radius, String fillColor, String borderColor) {
+    public Circle(double radius) {
         this.radius = radius;
-        this.fillColor = fillColor;
-        this.borderColor = borderColor;
     }
 
     @Override
@@ -20,7 +16,8 @@ class Circle implements Shape {
     }
 
     @Override
-    public String getFillColor() { return fillColor; }
+    public String getFillColor() { return null; }
+
     @Override
-    public String getBorderColor() { return borderColor; }
+    public String getBorderColor() { return null; }
 }
