@@ -14,7 +14,7 @@ import java.util.Set;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class MtsOnlinePaymentTest extends BaseTest {
-    
+
     private final WebDriver driver = Driver.getInstance();
     private final WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
 
@@ -22,11 +22,11 @@ public class MtsOnlinePaymentTest extends BaseTest {
     public void homePage() {
         driver.get("https://www.mts.by/");
         try {
-        WebElement acceptCookies = wait.until(ExpectedConditions.elementToBeClickable(By.id("cookie-agree")));
-        acceptCookies.click();
-    } catch (Exception e) {
+            WebElement acceptCookies = wait.until(ExpectedConditions.elementToBeClickable(By.id("cookie-agree")));
+            acceptCookies.click();
+        } catch (Exception e) {
+        }
     }
-}
 
     @Test
     @DisplayName("Проверка элементов блока онлайн-платежей")
@@ -48,7 +48,7 @@ public class MtsOnlinePaymentTest extends BaseTest {
         WebElement detailsLink = wait.until(ExpectedConditions.elementToBeClickable(By.linkText("Подробнее о сервисе")));
         String originalWindow = driver.getWindowHandle();
         detailsLink.click();
-        
+
         wait.until(ExpectedConditions.numberOfWindowsToBe(2));
         Set<String> windowHandles = driver.getWindowHandles();
         assertEquals(2, windowHandles.size(), "Новая вкладка не открылась");
