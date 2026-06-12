@@ -1,20 +1,19 @@
-import io.github.bonigarcia.wdm.WebDriverManager;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
-import org.openqa.selenium.chrome.ChromeOptions;
+import driver.Driver;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.openqa.selenium.WebDriver;
 
 public class BaseTest {
+    protected WebDriver driver;
 
-    @BeforeAll
-    public static void setUp() {
-        WebDriverManager.chromedriver().setup();
-        ChromeOptions options = new ChromeOptions();
-        options.addArguments("--start-maximized");
-        Driver.setOptions(options);
+    @BeforeEach
+    public void setUp() {
+        driver = Driver.initDriver();
+        driver.get("https://www.mts.by/");
     }
 
-    @AfterAll
-    public static void tearDown() {
-        Driver.quit();
+    @AfterEach
+    public void tearDown() {
+        Driver.closeDriver();
     }
 }
