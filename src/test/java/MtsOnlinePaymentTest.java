@@ -58,6 +58,10 @@ public class MtsOnlinePaymentTest extends BaseTest {
         paymentPage.fillPhoneNumber("297777777");
         paymentPage.fillSum("10");
         paymentPage.clickContinue();
+
+        WebElement modal = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[contains(@class, 'modal')]")));
+        assertTrue(modal.isDisplayed(), "Модальное окно с деталями платежа не отобразилось");
+        
         wait.until(ExpectedConditions.urlContains("asb.by"));
         assertTrue(driver.getCurrentUrl().contains("asb.by"), "Переход на страницу оплаты не осуществлен");
     }
