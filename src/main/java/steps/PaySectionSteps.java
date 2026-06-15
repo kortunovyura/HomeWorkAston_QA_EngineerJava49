@@ -1,121 +1,142 @@
 package steps;
 
 import io.qameta.allure.Step;
-import org.junit.jupiter.api.Assertions;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import page.MtsOnlinePaymentPage;
-
 import java.time.Duration;
+import java.util.List;
+import java.util.Set;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class PaySectionSteps {
     private final WebDriver driver;
-    private final MtsOnlinePaymentPage page;
-    private final WebDriverWait wait;
+    private final MtsOnlinePaymentPage paymentPage;
 
     public PaySectionSteps(WebDriver driver) {
         this.driver = driver;
-        this.page = new MtsOnlinePaymentPage(driver);
-        this.wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        this.paymentPage = new MtsOnlinePaymentPage(driver);
     }
 
-    @Step("Проверить название блока")
-    public PaySectionSteps verifyBlockTitle(String expectedTitle) {
-        wait.until(ExpectedConditions.visibilityOf(page.getBlockTitle()));
-        Assertions.assertEquals(expectedTitle, page.getBlockTitle().getText().trim());
+    private WebDriverWait getWait() {
+        return new WebDriverWait(driver, Duration.ofSeconds(15));
+    }
+
+    @Step("Открыть главную страницу и принять cookies")
+    public PaySectionSteps openPageAndAcceptCookies() {
+        paymentPage.open();
+        paymentPage.acceptCookies();
         return this;
     }
 
-    @Step("Проверить наличие логотипов платежных систем")
-    public PaySectionSteps verifyPaymentLogosAreVisible() {
-        Assertions.assertFalse(page.getPaymentLogos().isEmpty(), "Логотипы платежных систем не найдены");
-        for (WebElement logo : page.getPaymentLogos()) {
-            Assertions.assertTrue(logo.isDisplayed(), "Логотип скрыт на странице");
+    @Step("Проверить, что заголовок блока равен '{expectedTitle}'")
+    public PaySectionSteps verifySectionTitle(String expectedTitle) {
+        String actualTitle = paymentPage.getSectionTitleText();
+        assertEquals(expectedTitle, actualTitle, "Название блока не соответствует ожидаемому");
+        return this;
+    }
+
+    @Step("Проверить отображение логотипов платежных систем на главной странице")
+    public PaySectionSteps verifyPaymentLogosAreDisplayed() {
+        List<WebElement> logos = paymentPage.getPaymentLogos();
+        assertFalse(logos.isEmpty(), "Логотипы платёжных систем не найдены");
+        for (WebElement logo : logos) {
+            assertTrue(logo.isDisplayed(), "Один из логотипов не отображается на главной");
         }
         return this;
     }
 
-    @Step("Нажать на ссылку 'Подробнее о сервисе'")
-    public void clickMoreDetailsLink() {
-        page.getDetailsLink().click();
-    }
+    @Step("Нажать на ссылку 'Подробнее о сервисе' и проверить переход на URL с '{expectedUrlPart}'")
+    public PaySectionSteps verifyMoreDetailsLink(String expectedUrlPart) {
+        String originalWindow = driver.getWindowHandle();
+        paymentPage.clickMoreDetails();
 
-    @Step("Выбрать вариант оплаты: {tabName}")
-    public PaySectionSteps selectPaymentTab(String tabName) {
-        wait.until(ExpectedConditions.elementToBeClickable(page.getTab(tabName))).click();
+        getWait().until(ExpectedConditions.numberOfWindowsToBe(2));
+        Set<String> windowHandles = driver.getWindowHandles();
+
+        for (String windowHandle : windowHandles) {
+            if (!windowHandle.equals(originalWindow)) {
+                driver.switchTo().window(windowHandle);
+                break;
+            }
+        }
+        assertTrue(driver.getCurrentUrl().contains(expectedUrlPart),
+                "Ссылка ведет на некорректный URL: " + driver.getCurrentUrl());
+        driver.close();
+        driver.switchTo().window(originalWindow);
         return this;
     }
 
-    @Step("Проверить плейсхолдеры для варианта 'Услуги связи'")
-    public PaySectionSteps verifyConnectionPlaceholders(String phoneHolder, String sumHolder) {
-        Assertions.assertEquals(phoneHolder, page.getConnectionPhoneInput().getAttribute("placeholder"));
-        Assertions.assertEquals(sumHolder, page.getConnectionSumInput().getAttribute("placeholder"));
+    @Step("Проверить плейсхолдеры для Услуг связи: '{phoneTxt}', '{sumTxt}', '{emailTxt}'")
+    public PaySectionSteps checkPlaceholdersForConnectionServices(String phoneTxt, String sumTxt, String emailTxt) {
+        paymentPage.selectConnectionServices();
+        assertEquals(phoneTxt, paymentPage.getPlaceholder(paymentPage.getPhoneInput()));
+        assertEquals(sumTxt, paymentPage.getPlaceholder(paymentPage.getSumInput()));
+        assertEquals(emailTxt, paymentPage.getPlaceholder(paymentPage.getEmailInput()));
         return this;
     }
 
-    @Step("Проверить плейсхолдеры для варианта 'Домашний интернет'")
-    public PaySectionSteps verifyInternetPlaceholders(String phoneHolder, String sumHolder) {
-        Assertions.assertEquals(phoneHolder, page.getInternetPhoneInput().getAttribute("placeholder"));
-        Assertions.assertEquals(sumHolder, page.getInternetSumInput().getAttribute("placeholder"));
+    @Step("Проверить плейсхолдеры для Домашнего интернета: '{phoneTxt}', '{sumTxt}'")
+    public PaySectionSteps checkPlaceholdersForHomeInternet(String phoneTxt, String sumTxt) {
+        paymentPage.selectHomeInternet();
+        assertEquals(phoneTxt, paymentPage.getPlaceholder(paymentPage.getInternetPhoneInput()));
+        assertEquals(sumTxt, paymentPage.getPlaceholder(paymentPage.getInternetSumInput()));
         return this;
     }
 
-    @Step("Проверить плейсхолдеры для варианта 'Рассрочка'")
-    public PaySectionSteps verifyInstallmentPlaceholders(String scoreHolder, String sumHolder) {
-        Assertions.assertEquals(scoreHolder, page.getInstallmentScoreInput().getAttribute("placeholder"));
-        Assertions.assertEquals(sumHolder, page.getInstallmentSumInput().getAttribute("placeholder"));
+    @Step("Проверить плейсхолдеры для Рассрочки: '{accTxt}', '{sumTxt}'")
+    public PaySectionSteps checkPlaceholdersForInstallment(String accTxt, String sumTxt) {
+        paymentPage.selectInstallment();
+        assertEquals(accTxt, paymentPage.getPlaceholder(paymentPage.getScoreInstalmentInput()));
+        assertEquals(sumTxt, paymentPage.getPlaceholder(paymentPage.getInstalmentSumInput()));
         return this;
     }
 
-    @Step("Проверить плейсхолдеры для варианта 'Задолженность'")
-    public PaySectionSteps verifyArrearsPlaceholders(String scoreHolder, String sumHolder) {
-        Assertions.assertEquals(scoreHolder, page.getArrearsScoreInput().getAttribute("placeholder"));
-        Assertions.assertEquals(sumHolder, page.getArrearsSumInput().getAttribute("placeholder"));
+    @Step("Проверить плейсхолдеры для Задолженности: '{accTxt}', '{sumTxt}'")
+    public PaySectionSteps checkPlaceholdersForArrears(String accTxt, String sumTxt) {
+        paymentPage.selectArrears();
+        assertEquals(accTxt, paymentPage.getPlaceholder(paymentPage.getScoreArrearsInput()));
+        assertEquals(sumTxt, paymentPage.getPlaceholder(paymentPage.getArrearsSumInput()));
         return this;
     }
 
-    @Step("Заполнить поля 'Услуги связи' номером {phone} и суммой {sum}")
-    public PaySectionSteps fillConnectionData(String phone, String sum) {
-        page.getConnectionPhoneInput().sendKeys(phone);
-        page.getConnectionSumInput().sendKeys(sum);
+    @Step("Заполнить форму Услуг связи номером {phone}, суммой {sum} и нажать 'Продолжить'")
+    public PaySectionSteps fillAndSubmitConnectionServices(String phone, String sum) {
+        paymentPage.selectConnectionServices();
+        paymentPage.fillPhoneNumber(phone);
+        paymentPage.fillSum(sum);
+        paymentPage.clickContinue();
         return this;
     }
 
-    @Step("Нажать кнопку 'Продолжить'")
-    public PaySectionSteps clickContinue() {
-        page.getContinueButton().click();
-        return this;
-    }
+    @Step("Проверить корректность данных внутри открывшегося модального окна оплаты. Ожидаемая сумма: {expectedSum}, Телефон: {expectedPhone}")
+    public PaySectionSteps verifyModalPaymentWindow(String expectedSum, String expectedPhone) {
+        paymentPage.switchToPaymentModal();
 
-    @Step("Переключиться во фрейм оплаты")
-    public PaySectionSteps switchToPaymentFrame() {
-        wait.until(ExpectedConditions.frameToBeAvailableAndSwitchToIt(page.getPaymentIframe()));
-        return this;
-    }
+        String totalSumText = paymentPage.getIframeTotalSumText();
+        assertTrue(totalSumText.contains(expectedSum), "Сумма в описании модального окна не совпадает");
 
-    @Step("Проверить корректность суммы ({sum}) и номера ({phone}) в окне оплаты")
-    public PaySectionSteps verifyWidgetPaymentDetails(String sum, String phone) {
-        wait.until(ExpectedConditions.visibilityOf(page.getWidgetSumText()));
-        Assertions.assertTrue(page.getWidgetSumText().getText().contains(sum));
-        Assertions.assertTrue(page.getWidgetSubmitButton().getText().contains(sum));
-        Assertions.assertTrue(page.getWidgetPhoneText().getText().contains(phone));
-        return this;
-    }
+        String submitBtnText = paymentPage.getIframeSubmitBtnText();
+        assertTrue(submitBtnText.contains(expectedSum), "Сумма на кнопке оплаты в модальном окне не совпадает");
 
-    @Step("Проверить надписи в незаполненных полях ввода реквизитов карты")
-    public PaySectionSteps verifyWidgetCardPlaceholders() {
-        Assertions.assertEquals("Номер карты", page.getCardNumberInput().getAttribute("placeholder"));
-        Assertions.assertEquals("ММ/ГГ", page.getCardExpiryInput().getAttribute("placeholder"));
-        Assertions.assertEquals("CVC", page.getCardCvvInput().getAttribute("placeholder"));
-        Assertions.assertEquals("Имя держателя", page.getCardHolderInput().getAttribute("placeholder"));
-        return this;
-    }
+        String phoneInfoText = paymentPage.getIframePhoneInfoText();
+        assertTrue(phoneInfoText.contains(expectedPhone), "Номер телефона в модальном окне не совпадает");
 
-    @Step("Проверить наличие иконок платежных систем в окне оплаты")
-    public PaySectionSteps verifyWidgetLogosAreVisible() {
-        Assertions.assertFalse(page.getWidgetPaymentLogos().isEmpty(), "Иконки платёжных систем в виджете отсутствуют");
+        assertEquals("Номер карты", paymentPage.getIframeCardPlaceholder(paymentPage.getCardNumberInput()));
+        assertEquals("Срок действия", paymentPage.getIframeCardPlaceholder(paymentPage.getCardExpiryInput()));
+        assertEquals("CVC", paymentPage.getIframeCardPlaceholder(paymentPage.getCardCvcInput()));
+        assertEquals("Имя держателя карты", paymentPage.getIframeCardPlaceholder(paymentPage.getCardHolderInput()));
+
+        List<WebElement> cardLogos = paymentPage.getIframeCardLogos();
+        assertFalse(cardLogos.isEmpty(), "Иконки платежных систем внутри модального окна не найдены");
+        for (WebElement logo : cardLogos) {
+            assertTrue(logo.isDisplayed(), "Одна из иконок платежных систем в модальном окне скрыта");
+        }
+
+        paymentPage.switchToDefaultContent();
         return this;
     }
 }
