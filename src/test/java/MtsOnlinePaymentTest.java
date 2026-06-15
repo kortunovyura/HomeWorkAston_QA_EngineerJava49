@@ -1,59 +1,63 @@
-import io.qameta.allure.Feature;
-import io.qameta.allure.Story;
+package test;
+
+import io.qameta.allure.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import steps.PaySectionSteps;
 
-@Feature("Тестирование блока онлайн пополнения")
-public class MtsOnlinePaymentTest extends BaseTest {
+@Epic("Веб-портал МТС")
+@Feature("Онлайн пополнение без комиссии")
+public class MtsOnlinePaymentTest extends test.BaseTest {
     private PaySectionSteps steps;
 
     @BeforeEach
     public void initSteps() {
-        steps = new PaySectionSteps(driver);
+        steps = new PaySectionSteps(getDriver());
+        steps.openPageAndAcceptCookies();
     }
 
     @Test
-    @Story("Проверка UI элементов")
-    @DisplayName("Проверка названия блока, логотипов и ссылки 'Подробнее о сервисе'")
-    public void testBlockMainElements() {
-        steps.verifyBlockTitle("Онлайн пополнение без комиссии")
-             .verifyPaymentLogosAreVisible();
-        
-        steps.clickMoreDetailsLink();
+    @Severity(SeverityLevel.BLOCKER)
+    @Story("Визуальные элементы главной страницы")
+    @DisplayName("1. Проверка названия блока и наличия логотипов")
+    @Description("Тест проверяет корректность отображения названия секции оплаты и наличие картинок-логотипов платёжных систем.")
+    public void testSectionTitleAndLogos() {
+        steps.verifySectionTitle("Онлайн пополнение\nбез комиссии")
+                .verifyPaymentLogosAreDisplayed();
     }
 
     @Test
-    @Story("Проверка плейсхолдеров")
-    @DisplayName("Проверка надписей в незаполненных полях всех вариантов оплаты")
-    public void testTabsPlaceholders() {
-        steps.selectPaymentTab("Услуги связи")
-             .verifyConnectionPlaceholders("Номер телефона", "Сумма");
-
-        steps.selectPaymentTab("Домашний интернет")
-             .verifyInternetPlaceholders("Номер договора", "Сумма");
-
-        steps.selectPaymentTab("Рассрочка")
-             .verifyInstallmentPlaceholders("Номер счета", "Сумма");
-
-        steps.selectPaymentTab("Задолженность")
-             .verifyArrearsPlaceholders("Номер счета", "Сумма");
+    @Severity(SeverityLevel.CRITICAL)
+    @Story("Ссылки и навигация")
+    @DisplayName("2. Проверка работы ссылки 'Подробнее о сервисе'")
+    @Description("Тест кликает по ссылке и проверяет, что в новой вкладке открывается страница с правилами безопасности.")
+    public void testMoreDetailsLink() {
+        steps.verifyMoreDetailsLink("/help/poryadok-oplaty-i-bezopasnost/");
     }
 
     @Test
-    @Story("Проверка платежного виджета")
-    @DisplayName("Заполнение полей 'Услуги связи' и валидация данных в открывшемся окне")
-    public void testPaymentWidgetFlow() {
-        String phoneNumber = "297777777";
-        String paymentAmount = "10.00";
+    @Severity(SeverityLevel.NORMAL)
+    @Story("Валидация форм")
+    @DisplayName("3. Проверка надписей в незаполненных полях (плейсхолдеров) для всех вариантов")
+    @Description("Тест переключает вкладки способов оплаты и сверяет тексты-плейсхолдеры в пустых полях.")
+    public void testPlaceholdersInAllTabs() {
+        steps.checkPlaceholdersForConnectionServices("Номер телефона", "Сумма", "E-mail для отправки чека")
+                .checkPlaceholdersForHomeInternet("Номер абонента", "Сумма")
+                .checkPlaceholdersForInstallment("Номер счета на 44", "Сумма")
+                .checkPlaceholdersForArrears("Номер счета на 207", "Сумма");
+    }
 
-        steps.selectPaymentTab("Услуги связи")
-             .fillConnectionData(phoneNumber, paymentAmount)
-             .clickContinue()
-             .switchToPaymentFrame()
-             .verifyWidgetPaymentDetails(paymentAmount, phoneNumber)
-             .verifyWidgetCardPlaceholders()
-             .verifyWidgetLogosAreVisible();
+    @Test
+    @Severity(SeverityLevel.BLOCKER)
+    @Story("Процесс оплаты")
+    @DisplayName("4. Проверка ввода данных, открытия модального окна и валидация его содержимого")
+    @Description("Тест заполняет форму 'Услуги связи', нажимает 'Продолжить', переключается в появившийся iframe и валидирует переданные данные, иконки карт и плейсхолдеры.")
+    public void testConnectionServicesPaymentFlowInModal() {
+        String testPhone = "297777777";
+        String testSum = "10.00";
+
+        steps.fillAndSubmitConnectionServices(testPhone, testSum)
+                .verifyModalPaymentWindow(testSum, testPhone);
     }
 }
