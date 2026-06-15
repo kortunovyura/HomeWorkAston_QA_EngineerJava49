@@ -1,30 +1,33 @@
 package driver;
 
+import io.github.bonigarcia.wdm.WebDriverManager;
+import lombok.experimental.UtilityClass;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 
-import java.time.Duration;
-
+@UtilityClass
 public class Driver {
-    private static WebDriver driver;
+    private WebDriver driver;
+    private ChromeOptions chromeOptions;
 
-    public static WebDriver initDriver() {
+    public void setOptions(ChromeOptions options) {
+        chromeOptions = options;
+    }
+
+    public WebDriver getInstance() {
         if (driver == null) {
-            ChromeOptions options = new ChromeOptions();
-            options.addArguments("--start-maximized");
-            options.addArguments("--disable-notifications");
-            driver = new ChromeDriver(options);
-            driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
+            if (chromeOptions == null) {
+                WebDriverManager.chromedriver().setup();
+                chromeOptions = new ChromeOptions();
+                chromeOptions.addArguments("--start-maximized");
+            }
+            driver = new ChromeDriver(chromeOptions);
         }
         return driver;
     }
 
-    public static WebDriver getDriver() {
-        return driver;
-    }
-
-    public static void closeDriver() {
+    public void quit() {
         if (driver != null) {
             driver.quit();
             driver = null;
