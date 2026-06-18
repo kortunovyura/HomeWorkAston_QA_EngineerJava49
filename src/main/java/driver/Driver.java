@@ -1,32 +1,36 @@
 package driver;
 
-import lombok.Setter;
+import io.github.bonigarcia.wdm.WebDriverManager;
+import lombok.experimental.UtilityClass;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 
-import java.util.Objects;
-
+@UtilityClass
 public class Driver {
-    private final static ThreadLocal<WebDriver> driver = new ThreadLocal<>();
-    @Setter
-    private static ChromeOptions options;
+    private WebDriver driver;
+    private ChromeOptions chromeOptions;
 
-    public static WebDriver getInstance() {
-        if (Objects.isNull(driver.get())) {
-            if (options != null) {
-                driver.set(new ChromeDriver(options));
-            } else {
-                driver.set(new ChromeDriver());
-            }
-        }
-        return driver.get();
+    public void setOptions(ChromeOptions options) {
+        chromeOptions = options;
     }
 
-    public static void quit() {
-        if (Objects.nonNull(driver.get())) {
-            driver.get().quit();
-            driver.remove();
+    public WebDriver getInstance() {
+        if (driver == null) {
+            if (chromeOptions == null) {
+                WebDriverManager.chromedriver().setup();
+                chromeOptions = new ChromeOptions();
+                chromeOptions.addArguments("--start-maximized");
+            }
+            driver = new ChromeDriver(chromeOptions);
+        }
+        return driver;
+    }
+
+    public void quit() {
+        if (driver != null) {
+            driver.quit();
+            driver = null;
         }
     }
 }

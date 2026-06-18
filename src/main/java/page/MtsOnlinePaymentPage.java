@@ -14,7 +14,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MtsOnlinePaymentPage {
     private final WebDriver driver;
-    
     private WebDriverWait getWait() {
         return new WebDriverWait(driver, Duration.ofSeconds(10));
     }
@@ -33,13 +32,13 @@ public class MtsOnlinePaymentPage {
     private final By phoneInput = By.id("connection-phone");
     private final By sumInput = By.id("connection-sum");
     private final By emailInput = By.id("connection-email");
-    
+
     private final By internetPhoneInput = By.id("internet-phone");
     private final By internetSumInput = By.id("internet-sum");
-    
+
     private final By scoreInstalmentInput = By.id("score-instalment");
     private final By instalmentSumInput = By.id("instalment-sum");
-    
+
     private final By scoreArrearsInput = By.id("score-arrears");
     private final By arrearsSumInput = By.id("arrears-sum");
 
@@ -47,7 +46,7 @@ public class MtsOnlinePaymentPage {
     private final By iframeTotalSum = By.xpath("//span[contains(@class, 'pay-description__cost')]");
     private final By iframeSubmitBtn = By.xpath("//button[@type='submit' and contains(text(), 'Оплатить')]");
     private final By iframePhoneInfo = By.xpath("//span[contains(@class, 'pay-description__text')]");
-    
+
     private final By cardNumberInput = By.id("cc-number");
     private final By cardExpiryInput = By.id("cc-exp");
     private final By cardCvcInput = By.id("cc-csc");
